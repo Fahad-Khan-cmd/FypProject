@@ -1,6 +1,9 @@
 package com.example.travelwing.travelwing.Domain;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +13,6 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Getter
 @Setter
 public class Booking {
@@ -19,20 +21,30 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "route_id")
     private Route route;
 
+    @JsonManagedReference
+    @ManyToOne
+    @JoinColumn(name = "transport_mode_id")
+    private TransportationMode transportationMode;
+
 
     private LocalDate bookingDate;
-
+    private LocalDate bookingEndDate;
     private String bookingStatus;
 
     private Integer numTravelers;
+    private Double totalCost;
+
 
 
 }

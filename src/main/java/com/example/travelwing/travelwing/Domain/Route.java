@@ -1,9 +1,12 @@
 package com.example.travelwing.travelwing.Domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @Builder
@@ -17,6 +20,12 @@ public class Route {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "route")
+    private List<Booking> bookings;
+
 
     @ManyToOne
     @JoinColumn(name = "mode_id")

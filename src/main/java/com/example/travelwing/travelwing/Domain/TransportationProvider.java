@@ -1,6 +1,7 @@
 package com.example.travelwing.travelwing.Domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,6 +24,7 @@ public class TransportationProvider {
     private String contactInfo;
     private String address;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "transportationProvider")
     private List<TransportationMode> transportationModeList;
 
