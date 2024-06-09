@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CrossOrigin
+@CrossOrigin(origins = "http://10.23.42.172:3000")
 @RestController
 @RequestMapping("/routes")
 public class RouteController {
@@ -28,11 +28,13 @@ public class RouteController {
     }
 
     @GetMapping
+    @CrossOrigin(origins = "  http://10.23.42.172:3000")
     public ResponseEntity<List<Route>> getAllRoute() {
         return ResponseEntity.ok(routeService.getAllRoutes());
     }
 
     @PostMapping("/createRoutes")
+    @CrossOrigin(origins = "http://10.23.42.172:3000")
     public ResponseEntity<String> insertRoutes(@RequestBody Route route) {
         try {
             Boolean routes = routeService.createRoute(route);
@@ -48,7 +50,7 @@ public class RouteController {
 
     }
 
-    @CrossOrigin
+    @CrossOrigin(origins = "http://10.23.42.172:3000")
     @GetMapping("/departures")
     public List<String> getAllDeparturesLocations()
     {
@@ -58,8 +60,9 @@ public class RouteController {
     }
 
 
-    @CrossOrigin
+
     @GetMapping("/destinations")
+    @CrossOrigin(origins = "http://10.23.42.172:3000")
     public List<String> getAllDestinationsLocations()
     {
         return routeRepository.findAll().stream()
@@ -69,14 +72,12 @@ public class RouteController {
 
 
 
-    @CrossOrigin
     @GetMapping("/available")
-    public ResponseEntity<List<Route>> getAvailableRoutes(
-            @RequestParam String departureLocation,
-            @RequestParam String destinationLocation,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        List<Route> routes = routeService.getAvailableRoutes(departureLocation, destinationLocation, date);
-        return ResponseEntity.ok(routes);
+    @CrossOrigin(origins = "http://10.23.42.172:3000")
+    public List<Route> getAvailableRoutes(@RequestParam String departureLocation, @RequestParam String destinationLocation, @RequestParam String startDate, @RequestParam String endDate) {
+        LocalDate start = LocalDate.parse(startDate);
+        LocalDate end = endDate.isEmpty() ? start : LocalDate.parse(endDate);
+        return routeService.getAvailableRoutes(departureLocation, destinationLocation, start, end);
     }
 
 

@@ -18,6 +18,7 @@ public class BookingDto {
     private LocalDate bookingEndDate; // Add this field for round trips
     private LocalTime departureTime;
     private LocalTime arrivalTime;
+    private Long packageId;
     private Long transportModeId;
     private Integer numTravelers;
     private Double totalCost;

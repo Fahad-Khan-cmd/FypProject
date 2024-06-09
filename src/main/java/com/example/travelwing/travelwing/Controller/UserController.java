@@ -31,7 +31,7 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
-
+@CrossOrigin(origins = "  http://10.23.42.172:3000")
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -44,27 +44,27 @@ public class UserController {
     private final PdfService pdfService;
     private final RecommendationService recommendationService;
     private final BudgetRecommendationService budgetRecommendationService;
-    @CrossOrigin
+    @CrossOrigin(origins = "  http://10.23.42.172:3000")
     @GetMapping
     public ResponseEntity<List<User>> getAllUser()
     {
             return ResponseEntity.ok(userRepository.findAll());
     }
 
-    @CrossOrigin
+    @CrossOrigin(origins = "http://10.23.42.172:3000")
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
         return ResponseEntity.ok(userService.register(request));
     }
 
-    @CrossOrigin
+    @CrossOrigin(origins = "http://10.23.42.172:3000")
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         return ResponseEntity.ok(userService.authenticate(request));
     }
 
 
-    @CrossOrigin
+    @CrossOrigin(origins = "http://10.23.42.172:3000")
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(@RequestHeader("Authorization") String authHeader) {
         String token = authHeader.substring(7); // Remove "Bearer " prefix
@@ -73,8 +73,7 @@ public class UserController {
     }
 
 
-
-    @CrossOrigin
+    @CrossOrigin(origins = "http://10.23.42.172:3000")
     @GetMapping("/dashboard")
     public ResponseEntity<UserDashboardResponse> getUserDashboard(@AuthenticationPrincipal UserDetails userDetails) {
         User user = userService.findByEmail(userDetails.getUsername());
@@ -83,7 +82,7 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    @CrossOrigin
+    @CrossOrigin(origins = "http://10.23.42.172:3000")
     @GetMapping("/dashboard/download/{bookingId}")
     public ResponseEntity<byte[]> downloadBooking(@PathVariable Long bookingId, @AuthenticationPrincipal UserDetails userDetails) throws IOException {
         Booking booking = bookingService.getBookingById(bookingId).orElseThrow(() -> new RuntimeException("Booking not found"));
@@ -94,21 +93,21 @@ public class UserController {
         return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
     }
 
-    @CrossOrigin
+    @CrossOrigin(origins = "http://10.23.42.172:3000")
     @GetMapping("/profile")
     public ResponseEntity<User> getProfile(@AuthenticationPrincipal UserDetails userDetails) {
         User user = userService.findByEmail(userDetails.getUsername());
         return ResponseEntity.ok(user);
     }
 
-    @CrossOrigin
+    @CrossOrigin(origins = "http://10.23.42.172:3000")
     @PutMapping("/profile")
     public ResponseEntity<User> updateProfile(@AuthenticationPrincipal UserDetails userDetails, @RequestBody User updatedUser) {
         User user = userService.updateUser(userDetails.getUsername(), updatedUser);
         return ResponseEntity.ok(user);
     }
 
-    @CrossOrigin
+    @CrossOrigin(origins = "http://10.23.42.172:3000")
     @GetMapping("/recommendations")
     public ResponseEntity<List<String>> getRecommendations(@AuthenticationPrincipal UserDetails userDetails) {
         User user = userService.findByEmail(userDetails.getUsername());
@@ -121,7 +120,7 @@ public class UserController {
 
 
 
-    @CrossOrigin
+    @CrossOrigin(origins = "http://10.23.42.172:3000")
     @GetMapping("/budget-recommendations")
     public ResponseEntity<List<String>> getBudgetRecommendations(
             @RequestParam("budget") Double budget, @AuthenticationPrincipal UserDetails userDetails) {

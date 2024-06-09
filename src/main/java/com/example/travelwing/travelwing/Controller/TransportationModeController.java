@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/modes")
-@CrossOrigin
+@CrossOrigin(origins = "http://10.23.42.172:3000")
 public class TransportationModeController {
 
 
@@ -46,7 +46,7 @@ public class TransportationModeController {
 
 
     @GetMapping("/available")
-    @CrossOrigin
+    @CrossOrigin(origins = "http://10.23.42.172:3000")
     public List<TransportationMode> getAvailableTransportationModes(
             @RequestParam("departureLocation") String departureLocation,
             @RequestParam("destinationLocation") String destinationLocation,
@@ -85,12 +85,14 @@ public class TransportationModeController {
     }
 
     @GetMapping
+    @CrossOrigin(origins = "http://10.23.42.172:3000")
     public List<TransportationMode> findAllModes()
     {
         return transportationModeService.getAllTransportationMode();
     }
 
     @PostMapping("/createModes")
+    @CrossOrigin(origins = "  http://10.23.42.172:3000")
     public ResponseEntity<TransportationMode> insertModes(@RequestBody TransportationModeDto transportationModeDto)
     {
 
@@ -122,6 +124,7 @@ public class TransportationModeController {
     }
 
     @GetMapping("/modesByRoutesAndDates")
+    @CrossOrigin(origins = "http://10.23.42.172:3000")
     public ResponseEntity<List<TransportationMode>> getTransportationModes(
             @RequestParam String departureLocation,
             @RequestParam String destinationLocation,

@@ -2,7 +2,6 @@ package com.example.travelwing.travelwing.Domain;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,6 +35,12 @@ public class Booking {
     @ManyToOne
     @JoinColumn(name = "transport_mode_id")
     private TransportationMode transportationMode;
+
+
+    @JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "package_id")
+    private Packages travelPackage;
 
 
     private LocalDate bookingDate;

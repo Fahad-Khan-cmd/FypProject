@@ -2,6 +2,7 @@ package com.example.travelwing.travelwing.Controller;
 
 
 import com.example.travelwing.travelwing.DTO.BookingDto;
+import com.example.travelwing.travelwing.DTO.BookingRequest;
 import com.example.travelwing.travelwing.Domain.Booking;
 import com.example.travelwing.travelwing.Service.BookingService;
 import jakarta.mail.MessagingException;
@@ -17,7 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/bookings")
-@CrossOrigin
+@CrossOrigin(origins = "http://10.23.42.172:3000")
 public class BookingController {
 
         private final BookingService bookingService;
@@ -29,7 +30,7 @@ public class BookingController {
 
 
 
-    @CrossOrigin
+    @CrossOrigin(origins = "http://10.23.42.172:3000")
     @PostMapping("/create")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Booking> createBooking(@RequestBody BookingDto bookingDto, @AuthenticationPrincipal UserDetails userDetails) {
@@ -41,7 +42,21 @@ public class BookingController {
         }
     }
 
-    @CrossOrigin
+    @CrossOrigin(origins = "http://10.23.42.172:3000")
+    @PostMapping("/book-package")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Booking> bookPackage(@RequestBody BookingRequest bookingRequest, @AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            Booking booking = bookingService.bookPackage(bookingRequest, userDetails.getUsername());
+            return new ResponseEntity<>(booking, HttpStatus.CREATED);
+        } catch (MessagingException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @CrossOrigin(origins = "http://10.23.42.172:3000")
     @PostMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Optional<Booking>> getBookingById(@PathVariable Long id) {

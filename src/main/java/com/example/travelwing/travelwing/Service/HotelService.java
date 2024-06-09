@@ -32,7 +32,7 @@
 //            hotel.setAddress((String) result.get("vicinity"));
 //            hotel.setRating(result.get("rating") != null ? (Double) result.get("rating") : 0.0);
 //            return hotel;
-//        }).collect(Collectors.toList());
+//        })A.collect(Collectors.toList());
 //    }
 //
 //}

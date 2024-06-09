@@ -28,31 +28,39 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final CustomeUserDetailsService userDetailsService;
 
+
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
+
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            logger.warn("Missing or invalid Authorization header");
             filterChain.doFilter(request, response);
             return;
         }
+
         jwt = authHeader.substring(7);
         if (jwt.chars().filter(ch -> ch == '.').count() != 2) {
-            throw new MalformedJwtException("JWT strings must contain exactly 2 period characters. Found: " + jwt.chars().filter(ch -> ch == '.').count());
+            logger.warn("Malformed JWT token");
+            filterChain.doFilter(request, response);
+            return;
         }
+
         userEmail = jwtService.extractUsername(jwt);
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
             if (jwtService.isTokenValid(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+                logger.info("Authenticated user: {}");
+            } else {
+                logger.warn("Invalid JWT token");
             }
         }
+
         filterChain.doFilter(request, response);
     }
-
 }

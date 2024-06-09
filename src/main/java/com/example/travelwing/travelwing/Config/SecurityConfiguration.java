@@ -38,6 +38,8 @@ public class SecurityConfiguration {
                     auth.requestMatchers("/Providers/**").permitAll();
                     auth.requestMatchers("/modes/**").permitAll();
                     auth.requestMatchers("/routes/**").permitAll();
+                    auth.requestMatchers("/api/**").permitAll();
+                    auth.requestMatchers("/images/**").permitAll();
                     auth.requestMatchers("/bookings/**").authenticated();
                     auth.anyRequest().authenticated();
                 })
